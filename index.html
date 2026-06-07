@@ -2202,11 +2202,11 @@ footer {
   <div class="footer-inner">
     <div class="footer-logo">🛍️ KAAY DIAAY</div>
     <div class="footer-links">
-      <a href="#">À propos</a>
-      <a href="#">CGU</a>
-      <a href="#">Confidentialité</a>
-      <a href="#">Contact</a>
-      <a href="#">Aide</a>
+      <a href="#" onclick="ouvrirPageFooter('apropos');return false;">À propos</a>
+      <a href="#" onclick="ouvrirPageFooter('cgu');return false;">CGU</a>
+      <a href="#" onclick="ouvrirPageFooter('confidentialite');return false;">Confidentialité</a>
+      <a href="#" onclick="ouvrirPageFooter('contact');return false;">Contact</a>
+      <a href="#" onclick="ouvrirPageFooter('aide');return false;">Aide</a>
     </div>
     <div class="footer-copy">© 2026 KAAY DIAAY — Dakar, Sénégal<br>Powered by Wave & Orange Money</div>
   </div>
@@ -3074,6 +3074,456 @@ async function chargerMesAnnonces() {
     }
   }
 
+</script>
+
+<!-- ============ MODALES FOOTER ============ -->
+<div class="footer-modal-overlay" id="footerModalOverlay" onclick="if(event.target===this)fermerPageFooter()">
+  <div class="footer-modal" id="footerModal">
+    <button class="footer-modal-close" onclick="fermerPageFooter()">✕</button>
+    <div class="footer-modal-content" id="footerModalContent"></div>
+  </div>
+</div>
+
+<style>
+.footer-modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+  z-index: 9999;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.footer-modal-overlay.open { display: flex; }
+.footer-modal {
+  background: var(--blanc);
+  border-radius: 18px;
+  max-width: 720px;
+  width: 100%;
+  max-height: 85vh;
+  overflow-y: auto;
+  position: relative;
+  padding: 40px 36px 36px;
+  box-shadow: var(--ombre-forte);
+}
+.footer-modal-close {
+  position: absolute;
+  top: 16px; right: 18px;
+  background: var(--gris-pale);
+  border: none;
+  border-radius: 50%;
+  width: 32px; height: 32px;
+  font-size: 16px;
+  cursor: pointer;
+  color: var(--texte);
+  display: flex; align-items: center; justify-content: center;
+}
+.footer-modal-close:hover { background: var(--bordure); }
+.fm-titre {
+  font-family: 'Playfair Display', serif;
+  font-size: 26px;
+  font-weight: 900;
+  color: var(--verte);
+  margin-bottom: 8px;
+}
+.fm-sous { font-size: 14px; color: var(--gris); margin-bottom: 28px; }
+.fm-section { margin-bottom: 24px; }
+.fm-section h3 {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--sombre);
+  margin-bottom: 8px;
+  display: flex; align-items: center; gap: 8px;
+}
+.fm-section p, .fm-section li {
+  font-size: 14px;
+  color: var(--gris);
+  line-height: 1.75;
+}
+.fm-section ol, .fm-section ul { padding-left: 20px; }
+.fm-section li { margin-bottom: 6px; }
+.fm-highlight {
+  background: var(--verte-pale);
+  border-left: 4px solid var(--verte);
+  border-radius: 8px;
+  padding: 14px 18px;
+  font-size: 14px;
+  color: var(--texte);
+  margin: 16px 0;
+}
+.fm-contact-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+.fm-contact-card {
+  background: var(--gris-pale);
+  border-radius: 12px;
+  padding: 16px;
+  display: flex; align-items: flex-start; gap: 12px;
+}
+.fm-contact-icon { font-size: 24px; flex-shrink: 0; }
+.fm-contact-label { font-size: 12px; color: var(--gris); margin-bottom: 2px; }
+.fm-contact-val { font-size: 14px; font-weight: 600; color: var(--texte); }
+.fm-input {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1.5px solid var(--bordure);
+  border-radius: 10px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  color: var(--texte);
+  background: var(--blanc);
+  margin-bottom: 12px;
+  outline: none;
+  transition: border 0.2s;
+}
+.fm-input:focus { border-color: var(--verte); }
+.fm-textarea { min-height: 100px; resize: vertical; }
+.fm-faq-item {
+  border: 1.5px solid var(--bordure);
+  border-radius: 10px;
+  margin-bottom: 10px;
+  overflow: hidden;
+}
+.fm-faq-q {
+  padding: 14px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--texte);
+  cursor: pointer;
+  display: flex; justify-content: space-between; align-items: center;
+  background: var(--blanc);
+}
+.fm-faq-q:hover { background: var(--gris-pale); }
+.fm-faq-a {
+  display: none;
+  padding: 0 16px 14px;
+  font-size: 13px;
+  color: var(--gris);
+  line-height: 1.7;
+  background: var(--blanc);
+}
+.fm-faq-item.open .fm-faq-a { display: block; }
+.fm-faq-item.open .fm-faq-q { color: var(--verte); }
+.fm-divider { border: none; border-top: 1.5px solid var(--bordure); margin: 20px 0; }
+@media(max-width:600px){
+  .footer-modal { padding: 30px 20px 24px; }
+  .fm-contact-grid { grid-template-columns: 1fr; }
+  .fm-titre { font-size: 22px; }
+}
+</style>
+
+<script>
+var FOOTER_PAGES = {
+  apropos: {
+    titre: '🛍️ À propos de KAAY DIAAY',
+    sous: 'Le marché local sénégalais, maintenant en ligne',
+    html: `
+      <div class="fm-highlight">
+        <strong>KAAY DIAAY</strong> signifie <em>"Viens Acheter"</em> en Wolof — une invitation au commerce simple, local et sécurisé entre Sénégalais.
+      </div>
+      <div class="fm-section">
+        <h3>🎯 Notre mission</h3>
+        <p>Faciliter les échanges commerciaux entre particuliers et petits vendeurs à travers le Sénégal, en offrant une plateforme sûre, accessible et adaptée aux réalités locales.</p>
+      </div>
+      <div class="fm-section">
+        <h3>🌍 Notre vision</h3>
+        <p>Devenir la référence du commerce en ligne au Sénégal et en Afrique de l'Ouest, en valorisant les produits locaux et en soutenant l'économie informelle vers une digitalisation progressive.</p>
+      </div>
+      <div class="fm-section">
+        <h3>💡 Pourquoi KAAY DIAAY ?</h3>
+        <ul>
+          <li>Paiements 100% locaux via <strong>Wave</strong> et <strong>Orange Money</strong></li>
+          <li>Interface en français et en wolof</li>
+          <li>Vendeurs vérifiés et système de confiance intégré</li>
+          <li>Protection des transactions par système escrow</li>
+          <li>Accessible sur mobile, tablette et ordinateur</li>
+        </ul>
+      </div>
+      <div class="fm-section">
+        <h3>📍 Siège social</h3>
+        <p>Guédiawaye, Dakar, Sénégal<br>Fondé en 2026</p>
+      </div>
+      <hr class="fm-divider">
+      <div class="fm-section">
+        <h3>📊 En chiffres</h3>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;text-align:center">
+          <div style="background:var(--verte-pale);border-radius:12px;padding:16px">
+            <div style="font-size:22px;font-weight:900;color:var(--verte)">1 248</div>
+            <div style="font-size:12px;color:var(--gris)">Annonces actives</div>
+          </div>
+          <div style="background:var(--or-clair);border-radius:12px;padding:16px">
+            <div style="font-size:22px;font-weight:900;color:var(--or)">347</div>
+            <div style="font-size:12px;color:var(--gris)">Vendeurs vérifiés</div>
+          </div>
+          <div style="background:var(--gris-pale);border-radius:12px;padding:16px">
+            <div style="font-size:22px;font-weight:900;color:var(--texte)">4 891</div>
+            <div style="font-size:12px;color:var(--gris)">Transactions</div>
+          </div>
+        </div>
+      </div>
+    `
+  },
+  cgu: {
+    titre: '📜 Conditions Générales d\'Utilisation',
+    sous: 'Dernière mise à jour : 1er janvier 2026',
+    html: `
+      <div class="fm-highlight">
+        En utilisant KAAY DIAAY, vous acceptez les présentes Conditions Générales d'Utilisation. Veuillez les lire attentivement.
+      </div>
+      <div class="fm-section">
+        <h3>1️⃣ Objet et champ d'application</h3>
+        <p>Les présentes CGU régissent l'utilisation de la plateforme KAAY DIAAY, accessible via le site web et l'application mobile, et s'appliquent à tout utilisateur (acheteur ou vendeur) résidant ou opérant depuis le Sénégal ou l'étranger.</p>
+      </div>
+      <div class="fm-section">
+        <h3>2️⃣ Inscription et compte utilisateur</h3>
+        <ul>
+          <li>L'inscription est gratuite et ouverte à toute personne majeure (+18 ans).</li>
+          <li>Chaque utilisateur est responsable de la confidentialité de ses identifiants.</li>
+          <li>Un seul compte par personne est autorisé.</li>
+          <li>KAAY DIAAY se réserve le droit de suspendre tout compte frauduleux.</li>
+        </ul>
+      </div>
+      <div class="fm-section">
+        <h3>3️⃣ Règles de publication d'annonces</h3>
+        <ul>
+          <li>Les annonces doivent correspondre à des produits réels, disponibles et conformes à leur description.</li>
+          <li>Les photos doivent être authentiques et appartenir au vendeur.</li>
+          <li>Les prix doivent être exprimés en Francs CFA (FCFA).</li>
+          <li>Toute annonce trompeuse sera supprimée sans préavis.</li>
+        </ul>
+      </div>
+      <div class="fm-section">
+        <h3>4️⃣ Produits interdits</h3>
+        <p>Sont strictement prohibés sur la plateforme :</p>
+        <ul>
+          <li>Armes, munitions et explosifs</li>
+          <li>Stupéfiants et substances illicites</li>
+          <li>Produits contrefaits ou de contrebande</li>
+          <li>Espèces animales et végétales protégées</li>
+          <li>Médicaments sans autorisation réglementaire</li>
+          <li>Tout article illégal selon la loi sénégalaise</li>
+        </ul>
+      </div>
+      <div class="fm-section">
+        <h3>5️⃣ Paiements et transactions</h3>
+        <ul>
+          <li>Seuls les paiements via <strong>Wave</strong> et <strong>Orange Money</strong> sont acceptés.</li>
+          <li>Un système escrow protège les deux parties jusqu'à confirmation de réception.</li>
+          <li>KAAY DIAAY prélève une commission de 3% sur chaque transaction réussie.</li>
+        </ul>
+      </div>
+      <div class="fm-section">
+        <h3>6️⃣ Responsabilités</h3>
+        <p>KAAY DIAAY agit en tant qu'intermédiaire et ne saurait être tenu responsable des litiges entre acheteurs et vendeurs. Chaque partie s'engage à agir de bonne foi.</p>
+      </div>
+      <div class="fm-section">
+        <h3>7️⃣ Sanctions</h3>
+        <p>En cas de fraude avérée, le compte sera définitivement suspendu, les fonds bloqués, et les autorités compétentes sénégalaises pourront être saisies.</p>
+      </div>
+      <div class="fm-section">
+        <h3>8️⃣ Droit applicable</h3>
+        <p>Les présentes CGU sont régies par le droit sénégalais. Tout litige relèvera de la compétence des tribunaux de Dakar.</p>
+      </div>
+    `
+  },
+  confidentialite: {
+    titre: '🔐 Politique de Confidentialité',
+    sous: 'Comment nous protégeons vos données personnelles',
+    html: `
+      <div class="fm-highlight">
+        KAAY DIAAY s'engage à protéger la vie privée de ses utilisateurs conformément à la loi sénégalaise sur la protection des données personnelles (Loi n° 2008-12).
+      </div>
+      <div class="fm-section">
+        <h3>📋 Données collectées</h3>
+        <p>Nous collectons uniquement les données nécessaires au bon fonctionnement du service :</p>
+        <ul>
+          <li>Nom, prénom et adresse e-mail (inscription)</li>
+          <li>Numéro de téléphone (vérification et paiements)</li>
+          <li>Localisation approximative (ville/quartier)</li>
+          <li>Photos et descriptions des produits publiés</li>
+          <li>Historique des transactions</li>
+        </ul>
+      </div>
+      <div class="fm-section">
+        <h3>🎯 Utilisation des données</h3>
+        <ul>
+          <li>Gestion de votre compte et de vos annonces</li>
+          <li>Traitement et sécurisation des transactions</li>
+          <li>Envoi de notifications relatives à votre activité</li>
+          <li>Amélioration de l'expérience utilisateur</li>
+          <li>Prévention des fraudes</li>
+        </ul>
+      </div>
+      <div class="fm-section">
+        <h3>🚫 Ce que nous ne faisons pas</h3>
+        <ul>
+          <li>Nous ne vendons jamais vos données à des tiers</li>
+          <li>Nous ne partageons pas vos informations sans votre consentement</li>
+          <li>Nous ne stockons pas vos codes PIN Wave ou Orange Money</li>
+        </ul>
+      </div>
+      <div class="fm-section">
+        <h3>🍪 Cookies</h3>
+        <p>KAAY DIAAY utilise des cookies techniques indispensables au fonctionnement du site (session utilisateur, préférences). Aucun cookie publicitaire n'est utilisé.</p>
+      </div>
+      <div class="fm-section">
+        <h3>🛡️ Sécurité des données</h3>
+        <p>Vos données sont stockées sur des serveurs sécurisés (Supabase) avec chiffrement SSL. Les mots de passe sont hashés et jamais stockés en clair.</p>
+      </div>
+      <div class="fm-section">
+        <h3>✅ Vos droits</h3>
+        <p>Conformément à la loi n° 2008-12, vous disposez d'un droit d'accès, de rectification et de suppression de vos données. Pour exercer ces droits, contactez-nous à <strong>privacy@kaaydiaay.sn</strong></p>
+      </div>
+      <div class="fm-section">
+        <h3>📅 Durée de conservation</h3>
+        <p>Vos données sont conservées pendant la durée de votre compte actif, plus 3 ans après suppression pour obligations légales.</p>
+      </div>
+    `
+  },
+  contact: {
+    titre: '📬 Nous contacter',
+    sous: 'Notre équipe vous répond sous 24 heures',
+    html: `
+      <div class="fm-contact-grid">
+        <div class="fm-contact-card">
+          <div class="fm-contact-icon">📧</div>
+          <div>
+            <div class="fm-contact-label">Email général</div>
+            <div class="fm-contact-val">contact@kaaydiaay.sn</div>
+          </div>
+        </div>
+        <div class="fm-contact-card">
+          <div class="fm-contact-icon">🛡️</div>
+          <div>
+            <div class="fm-contact-label">Support & Litiges</div>
+            <div class="fm-contact-val">support@kaaydiaay.sn</div>
+          </div>
+        </div>
+        <div class="fm-contact-card">
+          <div class="fm-contact-icon">📱</div>
+          <div>
+            <div class="fm-contact-label">WhatsApp</div>
+            <div class="fm-contact-val">+221 77 000 00 00</div>
+          </div>
+        </div>
+        <div class="fm-contact-card">
+          <div class="fm-contact-icon">📍</div>
+          <div>
+            <div class="fm-contact-label">Adresse</div>
+            <div class="fm-contact-val">Guédiawaye, Dakar, Sénégal</div>
+          </div>
+        </div>
+      </div>
+      <hr class="fm-divider">
+      <div class="fm-section">
+        <h3>✉️ Envoyer un message</h3>
+        <select class="fm-input">
+          <option value="">— Objet de votre message —</option>
+          <option>Problème avec une annonce</option>
+          <option>Signaler un vendeur</option>
+          <option>Problème de paiement</option>
+          <option>Demande de partenariat</option>
+          <option>Autre</option>
+        </select>
+        <input type="text" class="fm-input" placeholder="Votre nom complet">
+        <input type="email" class="fm-input" placeholder="Votre adresse e-mail">
+        <textarea class="fm-input fm-textarea" placeholder="Décrivez votre demande..."></textarea>
+        <button class="btn-submit" onclick="toast('✅ Message envoyé ! Nous vous répondrons sous 24h.');fermerPageFooter()">
+          📤 Envoyer le message
+        </button>
+      </div>
+      <hr class="fm-divider">
+      <div class="fm-section">
+        <h3>🕐 Horaires du support</h3>
+        <p>Lundi – Vendredi : 8h00 – 18h00<br>Samedi : 9h00 – 13h00<br>Dimanche et jours fériés : fermé</p>
+      </div>
+    `
+  },
+  aide: {
+    titre: '❓ Centre d\'Aide',
+    sous: 'Trouvez rapidement une réponse à votre question',
+    html: `
+      <div class="fm-highlight">
+        💡 Consultez nos questions fréquentes ci-dessous. Si vous ne trouvez pas de réponse, contactez notre support.
+      </div>
+      <div class="fm-section">
+        <h3>🛒 Pour les Acheteurs</h3>
+        <div class="fm-faq-item" onclick="this.classList.toggle('open')">
+          <div class="fm-faq-q">Comment acheter un produit ? <span>▾</span></div>
+          <div class="fm-faq-a">Cliquez sur un produit, puis sur "Acheter". Choisissez votre mode de paiement (Wave ou Orange Money) et suivez les instructions. Le vendeur sera notifié immédiatement.</div>
+        </div>
+        <div class="fm-faq-item" onclick="this.classList.toggle('open')">
+          <div class="fm-faq-q">Comment payer en toute sécurité ? <span>▾</span></div>
+          <div class="fm-faq-a">Tous les paiements transitent par notre système escrow. Votre argent est bloqué jusqu'à ce que vous confirmiez avoir bien reçu le produit. Vous êtes donc protégé en cas de litige.</div>
+        </div>
+        <div class="fm-faq-item" onclick="this.classList.toggle('open')">
+          <div class="fm-faq-q">Que faire si je reçois un mauvais produit ? <span>▾</span></div>
+          <div class="fm-faq-a">Ne confirmez pas la réception. Ouvrez un litige depuis votre espace "Mes achats" sous 48h. Notre équipe interviendra pour résoudre le problème et protéger votre paiement.</div>
+        </div>
+        <div class="fm-faq-item" onclick="this.classList.toggle('open')">
+          <div class="fm-faq-q">Comment contacter un vendeur ? <span>▾</span></div>
+          <div class="fm-faq-a">Sur la page d'un produit, cliquez sur "Contacter le vendeur". Un chat sécurisé s'ouvrira directement dans l'application.</div>
+        </div>
+      </div>
+      <div class="fm-section">
+        <h3>📦 Pour les Vendeurs</h3>
+        <div class="fm-faq-item" onclick="this.classList.toggle('open')">
+          <div class="fm-faq-q">Comment publier une annonce ? <span>▾</span></div>
+          <div class="fm-faq-a">Cliquez sur "+ Vendre" en haut de la page. Remplissez le titre, la description, le prix, la catégorie et ajoutez une photo. Votre annonce sera visible après validation (sous 2h en général).</div>
+        </div>
+        <div class="fm-faq-item" onclick="this.classList.toggle('open')">
+          <div class="fm-faq-q">Quels sont les frais de vente ? <span>▾</span></div>
+          <div class="fm-faq-a">La publication d'annonces est gratuite. KAAY DIAAY prélève uniquement une commission de 3% sur chaque vente réussie. Aucun frais caché.</div>
+        </div>
+        <div class="fm-faq-item" onclick="this.classList.toggle('open')">
+          <div class="fm-faq-q">Comment recevoir mes paiements ? <span>▾</span></div>
+          <div class="fm-faq-a">Après confirmation de réception par l'acheteur, le montant (moins la commission) est transféré automatiquement sur votre compte Wave ou Orange Money dans les 24h.</div>
+        </div>
+        <div class="fm-faq-item" onclick="this.classList.toggle('open')">
+          <div class="fm-faq-q">Comment améliorer mon score de confiance ? <span>▾</span></div>
+          <div class="fm-faq-a">Complétez votre profil, vérifiez votre identité, répondez rapidement aux messages, et accumulez des avis positifs. Un bon score améliore la visibilité de vos annonces.</div>
+        </div>
+      </div>
+      <div class="fm-section">
+        <h3>💳 Paiements</h3>
+        <div class="fm-faq-item" onclick="this.classList.toggle('open')">
+          <div class="fm-faq-q">Quels modes de paiement sont acceptés ? <span>▾</span></div>
+          <div class="fm-faq-a">Actuellement : Wave et Orange Money. D'autres modes de paiement (Free Money, carte bancaire) seront ajoutés prochainement.</div>
+        </div>
+        <div class="fm-faq-item" onclick="this.classList.toggle('open')">
+          <div class="fm-faq-q">Mon paiement a échoué, que faire ? <span>▾</span></div>
+          <div class="fm-faq-a">Vérifiez votre solde Wave/Orange Money, puis réessayez. Si le problème persiste, contactez notre support à support@kaaydiaay.sn en indiquant votre numéro de transaction.</div>
+        </div>
+      </div>
+      <div style="text-align:center;margin-top:20px">
+        <p style="font-size:13px;color:var(--gris);margin-bottom:12px">Vous n'avez pas trouvé votre réponse ?</p>
+        <button class="btn-submit" style="max-width:280px" onclick="fermerPageFooter();setTimeout(()=>ouvrirPageFooter('contact'),200)">
+          📬 Contacter le support
+        </button>
+      </div>
+    `
+  }
+};
+
+function ouvrirPageFooter(page) {
+  var data = FOOTER_PAGES[page];
+  if (!data) return;
+  document.getElementById('footerModalContent').innerHTML =
+    '<div class="fm-titre">' + data.titre + '</div>' +
+    '<div class="fm-sous">' + data.sous + '</div>' +
+    data.html;
+  document.getElementById('footerModalOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function fermerPageFooter() {
+  document.getElementById('footerModalOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
 </script>
 
 <!-- PWA Install Banner -->
