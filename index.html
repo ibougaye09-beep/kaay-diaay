@@ -2094,105 +2094,77 @@ footer {
 </div>
 
 <!-- Modal Wave QR Code -->
-<div class="wave-modal-overlay" id="waveModalOverlay" onclick="if(event.target===this)fermerWaveModal()">
-  <div class="wave-modal">
-    <div class="wave-modal-header">
-      <div class="wave-logo-text">wave</div>
-      <p>Scannez pour payer en toute sécurité</p>
-    </div>
-    <div class="wave-modal-body">
-      <div class="wave-amount-box">
-        <div class="wave-amount-label">Montant à payer</div>
-        <div class="wave-amount-value" id="waveAmount">—</div>
-        <div class="wave-amount-commission" id="waveCommission"></div>
-      </div>
-      <div class="wave-qr-container">
-        <img src="data:image/jpeg;base64,/9j/4AAQ" alt="QR Code Wave" id="waveQrImg" style="width:200px;height:200px;display:block;"/>
-      </div>
-      <div style="margin-bottom:16px">
-        <div class="wave-step">
-          <div class="wave-step-num">1</div>
-          <span>Ouvrez votre app <strong>Wave</strong> sur votre téléphone</span>
-        </div>
-        <div class="wave-step">
-          <div class="wave-step-num">2</div>
-          <span>Appuyez sur <strong>Scanner un QR code</strong></span>
-        </div>
-        <div class="wave-step">
-          <div class="wave-step-num">3</div>
-          <span>Entrez le <strong>montant exact</strong> et confirmez</span>
-        </div>
-        <div class="wave-step">
-          <div class="wave-step-num">4</div>
-          <span>Cliquez sur <strong>"Paiement effectué"</strong> ci-dessous</span>
-        </div>
-      </div>
-      <button class="btn-wave-confirm" onclick="confirmerPaiementWave()">✅ Paiement effectué</button>
-      <button class="btn-wave-cancel" onclick="fermerWaveModal()">Annuler</button>
-    </div>
-  </div>
-</div>
-
-
-<!-- Modal Orange Money QR Code -->
+<!-- TUNNEL PAIEMENT WAVE -->
 <style>
-.om-modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.7); z-index:9999; align-items:center; justify-content:center; padding:20px; }
-.om-modal-overlay.open { display:flex; }
-.om-modal { background:white; border-radius:20px; width:100%; max-width:360px; overflow:hidden; animation:modalIn 0.3s ease; }
-.om-modal-header { background:#ff6600; padding:20px; text-align:center; color:white; }
-.om-logo-text { font-size:20px; font-weight:900; letter-spacing:0.5px; font-family:'DM Sans',sans-serif; }
-.om-modal-header p { font-size:13px; opacity:0.85; margin-top:4px; }
-.om-modal-body { padding:24px; text-align:center; }
-.om-amount-box { background:#fff5ee; border:1.5px solid #ff6600; border-radius:12px; padding:12px 20px; margin-bottom:18px; }
-.om-amount-label { font-size:12px; color:#666; margin-bottom:2px; }
-.om-amount-value { font-size:26px; font-weight:700; color:#ff6600; font-family:'Playfair Display',serif; }
-.om-amount-commission { font-size:11px; color:#888; margin-top:2px; }
-.om-qr-container { background:white; border:1.5px solid #e0e0e0; border-radius:12px; padding:12px; display:inline-block; margin-bottom:16px; }
-.om-qr-container img { width:200px; height:200px; display:block; }
-.om-step { display:flex; align-items:center; gap:10px; text-align:left; margin-bottom:8px; font-size:13px; color:#444; }
-.om-step-num { width:24px; height:24px; background:#ff6600; color:white; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; flex-shrink:0; }
-.btn-om-confirm { width:100%; padding:13px; background:#0e6e3f; color:white; border:none; border-radius:10px; font-size:14px; font-weight:700; cursor:pointer; transition:all 0.2s; font-family:'DM Sans',sans-serif; margin-bottom:8px; }
-.btn-om-confirm:hover { background:#1a9e5a; }
-.btn-om-cancel { width:100%; padding:10px; background:transparent; color:#888; border:none; font-size:13px; cursor:pointer; font-family:'DM Sans',sans-serif; }
+.pay-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.75); z-index:10000; align-items:center; justify-content:center; padding:16px; }
+.pay-overlay.open { display:flex; }
+.pay-tunnel { background:white; border-radius:20px; width:100%; max-width:380px; overflow:hidden; animation:modalIn 0.3s ease; }
+.pay-header-wave { background:linear-gradient(135deg,#009ee3,#0077b6); padding:20px; text-align:center; color:white; }
+.pay-header-om { background:linear-gradient(135deg,#ff6600,#cc4400); padding:20px; text-align:center; color:white; }
+.pay-logo { font-size:22px; font-weight:900; letter-spacing:1px; margin-bottom:4px; }
+.pay-logo-sub { font-size:12px; opacity:0.85; }
+.pay-steps-bar { display:flex; background:#f5f5f5; }
+.pay-step-tab { flex:1; padding:10px 4px; text-align:center; font-size:11px; font-weight:600; color:#aaa; border-bottom:3px solid transparent; transition:all 0.2s; }
+.pay-step-tab.active { color:#009ee3; border-bottom-color:#009ee3; }
+.pay-step-tab.active.om { color:#ff6600; border-bottom-color:#ff6600; }
+.pay-step-tab.done { color:#0e6e3f; }
+.pay-body { padding:24px; min-height:280px; }
+.pay-amount-big { text-align:center; margin-bottom:20px; }
+.pay-amount-num { font-family:'Playfair Display',serif; font-size:34px; font-weight:900; color:#009ee3; }
+.pay-amount-num.om { color:#ff6600; }
+.pay-amount-label { font-size:12px; color:#888; margin-top:2px; }
+.pay-amount-commission { font-size:11px; color:#aaa; margin-top:2px; }
+.pay-product-box { background:#f8f8f8; border-radius:12px; padding:14px; margin-bottom:18px; display:flex; align-items:center; gap:12px; }
+.pay-product-emoji { font-size:28px; }
+.pay-product-nom { font-size:14px; font-weight:700; color:#1c2e24; }
+.pay-product-vendeur { font-size:12px; color:#888; margin-top:2px; }
+.pay-escrow-badge { background:#e8f5ee; border:1.5px solid #0e6e3f; border-radius:10px; padding:10px 14px; font-size:12px; color:#0e6e3f; display:flex; align-items:center; gap:8px; margin-bottom:18px; font-weight:600; }
+.pay-method-btns { display:flex; flex-direction:column; gap:10px; }
+.pay-btn-wave { width:100%; padding:14px; background:#009ee3; color:white; border:none; border-radius:12px; font-size:15px; font-weight:700; cursor:pointer; font-family:'DM Sans',sans-serif; display:flex; align-items:center; justify-content:center; gap:8px; transition:all 0.2s; }
+.pay-btn-wave:hover { background:#0077b6; transform:translateY(-1px); }
+.pay-btn-om { width:100%; padding:14px; background:#ff6600; color:white; border:none; border-radius:12px; font-size:15px; font-weight:700; cursor:pointer; font-family:'DM Sans',sans-serif; display:flex; align-items:center; justify-content:center; gap:8px; transition:all 0.2s; }
+.pay-btn-om:hover { background:#cc4400; transform:translateY(-1px); }
+.pay-instruction-box { background:#f0f8ff; border-radius:12px; padding:16px; margin-bottom:18px; }
+.pay-instruction-box.om { background:#fff5ee; }
+.pay-instr-step { display:flex; align-items:flex-start; gap:10px; margin-bottom:10px; font-size:13px; color:#333; line-height:1.5; }
+.pay-instr-num { width:26px; height:26px; background:#009ee3; color:white; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; flex-shrink:0; }
+.pay-instr-num.om { background:#ff6600; }
+.pay-numero-box { background:#1c2e24; color:white; border-radius:12px; padding:14px 18px; text-align:center; margin-bottom:18px; }
+.pay-numero-label { font-size:11px; color:rgba(255,255,255,0.6); margin-bottom:4px; }
+.pay-numero-val { font-size:22px; font-weight:900; letter-spacing:2px; color:#4ade80; font-family:'Playfair Display',serif; }
+.pay-numero-copy { font-size:11px; color:rgba(255,255,255,0.5); margin-top:4px; cursor:pointer; }
+.pay-numero-copy:hover { color:white; }
+.pay-confirm-zone { text-align:center; }
+.pay-countdown { font-size:13px; color:#888; margin-bottom:14px; }
+.pay-countdown span { font-weight:700; color:#0e6e3f; font-size:16px; }
+.pay-btn-confirm { width:100%; padding:15px; background:#0e6e3f; color:white; border:none; border-radius:12px; font-size:15px; font-weight:700; cursor:pointer; font-family:'DM Sans',sans-serif; transition:all 0.2s; margin-bottom:8px; }
+.pay-btn-confirm:disabled { background:#ccc; cursor:not-allowed; }
+.pay-btn-confirm:not(:disabled):hover { background:#1a9e5a; transform:translateY(-1px); }
+.pay-securite-note { font-size:11px; color:#aaa; text-align:center; margin-top:8px; }
+.pay-success-zone { text-align:center; padding:10px 0; }
+.pay-success-icon { font-size:56px; margin-bottom:12px; }
+.pay-success-titre { font-size:20px; font-weight:900; color:#0e6e3f; margin-bottom:6px; font-family:'Playfair Display',serif; }
+.pay-success-sub { font-size:13px; color:#888; line-height:1.6; margin-bottom:20px; }
+.pay-btn-close { width:100%; padding:13px; background:#0e6e3f; color:white; border:none; border-radius:12px; font-size:14px; font-weight:700; cursor:pointer; font-family:'DM Sans',sans-serif; }
 </style>
-<div class="om-modal-overlay" id="omModalOverlay" onclick="if(event.target===this)fermerOmModal()">
-  <div class="om-modal">
-    <div class="om-modal-header">
-      <div class="om-logo-text">Orange Money</div>
-      <p>Scannez pour payer en toute sécurité</p>
+
+<div class="pay-overlay" id="payOverlay">
+  <div class="pay-tunnel" id="payTunnel">
+    <!-- Header dynamique -->
+    <div id="payHeader"></div>
+    <!-- Barre d'étapes -->
+    <div class="pay-steps-bar" id="payStepsBar">
+      <div class="pay-step-tab active" id="payTab1">1 · Récapitulatif</div>
+      <div class="pay-step-tab" id="payTab2">2 · Paiement</div>
+      <div class="pay-step-tab" id="payTab3">3 · Confirmation</div>
     </div>
-    <div class="om-modal-body">
-      <div class="om-amount-box">
-        <div class="om-amount-label">Montant à payer</div>
-        <div class="om-amount-value" id="omAmount">—</div>
-        <div class="om-amount-commission" id="omCommission"></div>
-      </div>
-      <div class="om-qr-container">
-        <img src="data:image/png;base64,iVBORw0KGgo" alt="QR Code Orange Money" style="width:200px;height:200px;display:block;"/>
-      </div>
-      <div style="margin-bottom:16px">
-        <div class="om-step">
-          <div class="om-step-num">1</div>
-          <span>Ouvrez votre app <strong>Orange Money</strong></span>
-        </div>
-        <div class="om-step">
-          <div class="om-step-num">2</div>
-          <span>Appuyez sur <strong>Payer / Scanner</strong></span>
-        </div>
-        <div class="om-step">
-          <div class="om-step-num">3</div>
-          <span>Entrez le <strong>montant exact</strong> et validez</span>
-        </div>
-        <div class="om-step">
-          <div class="om-step-num">4</div>
-          <span>Cliquez sur <strong>"Paiement effectué"</strong> ci-dessous</span>
-        </div>
-      </div>
-      <button class="btn-om-confirm" onclick="confirmerPaiementOm()">✅ Paiement effectué</button>
-      <button class="btn-om-cancel" onclick="fermerOmModal()">Annuler</button>
-    </div>
+    <!-- Corps dynamique -->
+    <div class="pay-body" id="payBody"></div>
   </div>
 </div>
+
+
+<!-- Orange Money intégré dans pay-overlay ci-dessus -->
 
 <!-- Toast -->
 <div class="toast" id="toastEl"></div>
@@ -2595,57 +2567,163 @@ function toast(msg) {
 var currentProduit = null;
 var TAUX_COMMISSION = 0.05; // 5%
 
-function ouvrirWaveQR() {
+// ===== TUNNEL PAIEMENT UNIFIÉ =====
+var payData = {};
+var payCountdownTimer = null;
+
+function ouvrirWaveQR() { lancerTunnel('wave'); }
+function ouvrirOmQR()   { lancerTunnel('om'); }
+
+function lancerTunnel(mode) {
   var nom = document.getElementById('modalNom').textContent;
   var prixText = document.getElementById('modalPrix').textContent;
-  var prix = parseInt(prixText.replace(/[^0-9]/g, ''));
-  if (!prix) prix = 0;
+  var prix = parseInt(prixText.replace(/[^0-9]/g, '')) || 0;
   var commission = Math.round(prix * TAUX_COMMISSION);
-  var vendeurRecoit = prix - commission;
+  var emoji = document.getElementById('modalImg').textContent || '📦';
 
-  document.getElementById('waveAmount').textContent = prix.toLocaleString('fr-FR') + ' FCFA';
-  document.getElementById('waveCommission').textContent =
-    'dont commission KAAY DIAAY : ' + commission.toLocaleString('fr-FR') + ' FCFA (5%)';
+  payData = { mode: mode, nom: nom, prix: prix, commission: commission, emoji: emoji };
 
-  document.getElementById('waveModalOverlay').classList.add('open');
+  // Header
+  if (mode === 'wave') {
+    document.getElementById('payHeader').innerHTML =
+      '<div class="pay-header-wave"><div class="pay-logo">wave</div><div class="pay-logo-sub">Paiement sécurisé · Sénégal</div></div>';
+  } else {
+    document.getElementById('payHeader').innerHTML =
+      '<div class="pay-header-om"><div class="pay-logo">Orange Money</div><div class="pay-logo-sub">Paiement sécurisé · Sénégal</div></div>';
+  }
+
+  afficherEtape(1);
+  document.getElementById('payOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
 }
 
-function fermerWaveModal() {
-  document.getElementById('waveModalOverlay').classList.remove('open');
+function afficherEtape(etape) {
+  if (payCountdownTimer) { clearInterval(payCountdownTimer); payCountdownTimer = null; }
+
+  // Mettre à jour barre d'étapes
+  for (var i = 1; i <= 3; i++) {
+    var tab = document.getElementById('payTab' + i);
+    tab.className = 'pay-step-tab';
+    if (i < etape) tab.classList.add('done');
+    else if (i === etape) { tab.classList.add('active'); if (payData.mode === 'om') tab.classList.add('om'); }
+  }
+
+  var mode = payData.mode;
+  var prix = payData.prix;
+  var commission = payData.commission;
+  var nom = payData.nom;
+  var emoji = payData.emoji;
+  var isWave = mode === 'wave';
+  var couleur = isWave ? '#009ee3' : '#ff6600';
+  var numStr = isWave ? '+221 78 794 67 04' : '+221 77 000 00 00';
+
+  if (etape === 1) {
+    document.getElementById('payBody').innerHTML =
+      '<div class="pay-amount-big">' +
+        '<div class="pay-amount-num' + (isWave ? '' : ' om') + '">' + prix.toLocaleString('fr-FR') + ' <span style="font-size:16px">FCFA</span></div>' +
+        '<div class="pay-amount-label">Montant total à payer</div>' +
+        '<div class="pay-amount-commission">dont ' + commission.toLocaleString('fr-FR') + ' FCFA de commission KAAY DIAAY</div>' +
+      '</div>' +
+      '<div class="pay-product-box">' +
+        '<div class="pay-product-emoji">' + emoji + '</div>' +
+        '<div><div class="pay-product-nom">' + nom + '</div>' +
+        '<div class="pay-product-vendeur">✅ Vendeur vérifié · Paiement escrow</div></div>' +
+      '</div>' +
+      '<div class="pay-escrow-badge">🔒 Votre argent est protégé jusqu\'à réception du produit</div>' +
+      '<div class="pay-method-btns">' +
+        (isWave
+          ? '<button class="pay-btn-wave" onclick="afficherEtape(2)">💳 Payer avec Wave →</button>'
+          : '<button class="pay-btn-om" onclick="afficherEtape(2)">💳 Payer avec Orange Money →</button>'
+        ) +
+      '</div>' +
+      '<div class="pay-securite-note">🔐 Paiement chiffré · Aucun remboursement après confirmation</div>';
+
+  } else if (etape === 2) {
+    var instrClass = isWave ? '' : ' om';
+    var numClass = isWave ? '' : ' om';
+    document.getElementById('payBody').innerHTML =
+      '<div class="pay-amount-big">' +
+        '<div class="pay-amount-num' + (isWave ? '' : ' om') + '">' + prix.toLocaleString('fr-FR') + ' FCFA</div>' +
+        '<div class="pay-amount-label">Envoyez exactement ce montant</div>' +
+      '</div>' +
+      '<div class="pay-instruction-box' + instrClass + '">' +
+        '<div class="pay-instr-step"><div class="pay-instr-num' + numClass + '">1</div><span>Ouvrez votre app <strong>' + (isWave ? 'Wave' : 'Orange Money') + '</strong> sur votre téléphone</span></div>' +
+        '<div class="pay-instr-step"><div class="pay-instr-num' + numClass + '">2</div><span>Appuyez sur <strong>' + (isWave ? 'Envoyer de l\'argent' : 'Transfert / Payer') + '</strong></span></div>' +
+        '<div class="pay-instr-step"><div class="pay-instr-num' + numClass + '">3</div><span>Entrez le numéro ci-dessous et le montant <strong>' + prix.toLocaleString('fr-FR') + ' FCFA</strong></span></div>' +
+        '<div class="pay-instr-step"><div class="pay-instr-num' + numClass + '">4</div><span>Validez avec votre <strong>code secret</strong></span></div>' +
+      '</div>' +
+      '<div class="pay-numero-box">' +
+        '<div class="pay-numero-label">Numéro ' + (isWave ? 'Wave' : 'Orange Money') + ' du vendeur</div>' +
+        '<div class="pay-numero-val">' + numStr + '</div>' +
+        '<div class="pay-numero-copy" onclick="copierNumero(\'' + numStr + '\')">📋 Appuyez pour copier</div>' +
+      '</div>' +
+      '<button class="pay-btn-confirm" onclick="afficherEtape(3)"' + (isWave ? '' : '') + '>✅ J\'ai effectué le paiement →</button>' +
+      '<div class="pay-securite-note">⚠️ Ne confirmez que si vous avez bien effectué le transfert</div>';
+
+  } else if (etape === 3) {
+    var secondes = 5;
+    document.getElementById('payBody').innerHTML =
+      '<div class="pay-confirm-zone">' +
+        '<div style="font-size:14px;font-weight:700;color:#1c2e24;margin-bottom:12px">Confirmez votre paiement</div>' +
+        '<div style="background:#fff3cd;border:1.5px solid #f0ad00;border-radius:10px;padding:12px;font-size:12px;color:#7a5c00;margin-bottom:16px;text-align:left">' +
+          '⚠️ <strong>Attention :</strong> En cliquant sur "Confirmer", vous certifiez avoir effectué le paiement de <strong>' + prix.toLocaleString('fr-FR') + ' FCFA</strong>. Cette action est <strong>irréversible</strong>.' +
+        '</div>' +
+        '<div class="pay-countdown">Bouton disponible dans <span id="paySecondes">' + secondes + '</span> secondes</div>' +
+        '<button class="pay-btn-confirm" id="payBtnFinal" disabled onclick="finaliserPaiement()">🔒 Confirmer le paiement</button>' +
+        '<div class="pay-securite-note">🛡️ Transaction enregistrée · Litige possible sous 48h</div>' +
+      '</div>';
+
+    payCountdownTimer = setInterval(function() {
+      secondes--;
+      var el = document.getElementById('paySecondes');
+      if (el) el.textContent = secondes;
+      if (secondes <= 0) {
+        clearInterval(payCountdownTimer);
+        payCountdownTimer = null;
+        var btn = document.getElementById('payBtnFinal');
+        var cd = document.querySelector('.pay-countdown');
+        if (btn) { btn.disabled = false; btn.style.background = '#0e6e3f'; }
+        if (cd) cd.style.display = 'none';
+      }
+    }, 1000);
+  }
 }
 
-function confirmerPaiementWave() {
-  fermerWaveModal();
+function copierNumero(num) {
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(num.replace(/\s/g,''));
+    toast('📋 Numéro copié !');
+  }
+}
+
+function finaliserPaiement() {
+  if (payCountdownTimer) { clearInterval(payCountdownTimer); payCountdownTimer = null; }
+  document.getElementById('payBody').innerHTML =
+    '<div class="pay-success-zone">' +
+      '<div class="pay-success-icon">🎉</div>' +
+      '<div class="pay-success-titre">Paiement confirmé !</div>' +
+      '<div class="pay-success-sub">Votre commande pour <strong>' + payData.nom + '</strong> est enregistrée.<br>Le vendeur sera notifié immédiatement.<br>Vous recevrez votre produit sous 24-48h.</div>' +
+      '<div style="background:#e8f5ee;border-radius:10px;padding:12px;font-size:12px;color:#0e6e3f;margin-bottom:18px">🔒 Fonds sécurisés en escrow · Libération après réception confirmée</div>' +
+      '<button class="pay-btn-close" onclick="fermerTunnel()">✅ Retour au marché</button>' +
+    '</div>';
+  // Mettre à jour barre étapes
+  for (var i = 1; i <= 3; i++) {
+    document.getElementById('payTab' + i).className = 'pay-step-tab done';
+  }
+}
+
+function fermerTunnel() {
+  if (payCountdownTimer) { clearInterval(payCountdownTimer); payCountdownTimer = null; }
+  document.getElementById('payOverlay').classList.remove('open');
+  document.body.style.overflow = '';
   fermerModal();
-  var nom = document.getElementById('modalNom') ? document.getElementById('modalNom').textContent : 'produit';
-  toast('✅ Paiement Wave confirmé pour ' + nom + ' ! Merci 🎉');
 }
 
-
-// ===== ORANGE MONEY QR PAYMENT =====
-function ouvrirOmQR() {
-  var prixText = document.getElementById('modalPrix').textContent;
-  var prix = parseInt(prixText.replace(/[^0-9]/g, ''));
-  if (!prix) prix = 0;
-  var commission = Math.round(prix * TAUX_COMMISSION);
-
-  document.getElementById('omAmount').textContent = prix.toLocaleString('fr-FR') + ' FCFA';
-  document.getElementById('omCommission').textContent =
-    'dont commission KAAY DIAAY : ' + commission.toLocaleString('fr-FR') + ' FCFA (5%)';
-
-  document.getElementById('omModalOverlay').classList.add('open');
-}
-
-function fermerOmModal() {
-  document.getElementById('omModalOverlay').classList.remove('open');
-}
-
-function confirmerPaiementOm() {
-  fermerOmModal();
-  fermerModal();
-  var nom = document.getElementById('modalNom') ? document.getElementById('modalNom').textContent : 'produit';
-  toast('✅ Paiement Orange Money confirmé pour ' + nom + ' ! Merci 🎉');
-}
+// Anciennes fonctions conservées pour compatibilité
+function fermerWaveModal() { fermerTunnel(); }
+function fermerOmModal() { fermerTunnel(); }
+function confirmerPaiementWave() { finaliserPaiement(); }
+function confirmerPaiementOm() { finaliserPaiement(); }
 
 
 
