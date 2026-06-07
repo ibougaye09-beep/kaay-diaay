@@ -1576,6 +1576,7 @@ footer {
     <div class="nav-tab" onclick="showSection('tableau')" id="tab-tableau">📊 Tableau de bord</div>
     <div class="nav-tab" onclick="showSection('profil')" id="tab-profil">👤 Mon profil</div>
     <div class="nav-tab" onclick="showSection('securite')" id="tab-securite">🔒 Sécurité & CGU</div>
+    <div class="nav-tab" onclick="showSection('admin')" id="tab-admin" style="display:none">⚙️ Admin</div>
   </div>
 </nav>
 
@@ -1968,6 +1969,81 @@ footer {
     </div>
   </div>
 </div>
+
+<!-- ============ SECTION ADMIN ============ -->
+<div class="section" id="section-admin">
+  <div class="container">
+    <div class="section-title">⚙️ Tableau de bord Admin</div>
+
+    <!-- Vérification mot de passe admin -->
+    <div id="adminLock" style="max-width:400px;margin:40px auto;text-align:center">
+      <div style="font-size:48px;margin-bottom:16px">🔐</div>
+      <div style="font-size:18px;font-weight:700;margin-bottom:8px;color:var(--texte)">Accès Administrateur</div>
+      <div style="font-size:13px;color:var(--gris);margin-bottom:20px">Réservé à l'équipe KAAY DIAAY</div>
+      <input type="password" id="adminPwd" class="form-input" placeholder="Mot de passe admin" style="margin-bottom:12px;text-align:center;letter-spacing:4px"
+        onkeydown="if(event.key==='Enter')verifierAdmin()">
+      <button class="btn-submit" onclick="verifierAdmin()">🔓 Accéder</button>
+    </div>
+
+    <!-- Dashboard admin (caché jusqu'à connexion) -->
+    <div id="adminPanel" style="display:none">
+
+      <!-- Onglets admin -->
+      <div style="display:flex;gap:8px;margin-bottom:24px;flex-wrap:wrap">
+        <button class="admin-tab active" id="atab-pending" onclick="switchAdminTab('pending',this)">⏳ En attente</button>
+        <button class="admin-tab" id="atab-active" onclick="switchAdminTab('active',this)">🟢 Actives</button>
+        <button class="admin-tab" id="atab-rejected" onclick="switchAdminTab('rejected',this)">🔴 Refusées</button>
+      </div>
+
+      <!-- Stats rapides -->
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:24px">
+        <div style="background:var(--or-clair);border-radius:12px;padding:16px;text-align:center">
+          <div style="font-size:24px;font-weight:900;color:var(--or)" id="adminNbPending">—</div>
+          <div style="font-size:12px;color:var(--gris)">En attente</div>
+        </div>
+        <div style="background:var(--verte-pale);border-radius:12px;padding:16px;text-align:center">
+          <div style="font-size:24px;font-weight:900;color:var(--verte)" id="adminNbActive">—</div>
+          <div style="font-size:12px;color:var(--gris)">Actives</div>
+        </div>
+        <div style="background:#fef2f2;border-radius:12px;padding:16px;text-align:center">
+          <div style="font-size:24px;font-weight:900;color:var(--rouge)" id="adminNbRejected">—</div>
+          <div style="font-size:12px;color:var(--gris)">Refusées</div>
+        </div>
+      </div>
+
+      <!-- Liste des annonces -->
+      <div id="adminAnnoncesList"></div>
+
+      <button onclick="chargerAnnoncesAdmin()" style="margin-top:16px;padding:10px 20px;background:var(--gris-pale);border:1.5px solid var(--bordure);border-radius:10px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600">
+        🔄 Actualiser
+      </button>
+    </div>
+  </div>
+</div>
+
+<style>
+.admin-tab { padding:10px 18px; border:1.5px solid var(--bordure); border-radius:10px; background:white; cursor:pointer; font-family:'DM Sans',sans-serif; font-size:13px; font-weight:600; color:var(--gris); transition:all 0.2s; }
+.admin-tab.active { background:var(--verte); color:white; border-color:var(--verte); }
+.admin-card { background:white; border-radius:14px; padding:18px; margin-bottom:12px; border:1.5px solid var(--bordure); display:flex; align-items:flex-start; gap:14px; box-shadow:var(--ombre); }
+.admin-card-emoji { font-size:32px; flex-shrink:0; width:52px; height:52px; background:var(--gris-pale); border-radius:10px; display:flex; align-items:center; justify-content:center; }
+.admin-card-body { flex:1; min-width:0; }
+.admin-card-nom { font-size:15px; font-weight:700; color:var(--texte); margin-bottom:4px; }
+.admin-card-prix { font-size:14px; font-weight:700; color:var(--verte); margin-bottom:4px; }
+.admin-card-meta { font-size:12px; color:var(--gris); margin-bottom:8px; }
+.admin-card-desc { font-size:12px; color:var(--gris); line-height:1.5; margin-bottom:10px; background:var(--gris-pale); border-radius:8px; padding:8px 10px; }
+.admin-card-btns { display:flex; gap:8px; flex-wrap:wrap; }
+.btn-valider { padding:8px 16px; background:var(--verte); color:white; border:none; border-radius:8px; font-size:13px; font-weight:700; cursor:pointer; font-family:'DM Sans',sans-serif; transition:all 0.2s; }
+.btn-valider:hover { background:var(--verte-clair); }
+.btn-refuser { padding:8px 16px; background:var(--rouge); color:white; border:none; border-radius:8px; font-size:13px; font-weight:700; cursor:pointer; font-family:'DM Sans',sans-serif; transition:all 0.2s; }
+.btn-refuser:hover { background:#a93226; }
+.btn-admin-sm { padding:7px 12px; background:var(--gris-pale); border:1.5px solid var(--bordure); border-radius:8px; font-size:12px; font-weight:600; cursor:pointer; font-family:'DM Sans',sans-serif; color:var(--texte); }
+.admin-empty { text-align:center; padding:40px 20px; color:var(--gris); }
+.admin-empty-icon { font-size:40px; margin-bottom:12px; }
+.admin-status-badge { display:inline-block; padding:3px 10px; border-radius:20px; font-size:11px; font-weight:700; }
+.admin-status-badge.pending { background:#fff3cd; color:#7a5c00; }
+.admin-status-badge.active { background:var(--verte-pale); color:var(--verte); }
+.admin-status-badge.rejected { background:#fef2f2; color:var(--rouge); }
+</style>
 
 <!-- Modal Produit -->
 <div class="modal-overlay" id="modalOverlay" onclick="if(event.target===this)fermerModal()">
@@ -2366,7 +2442,7 @@ async function publierAnnonce() {
     categorie: cat,
     etat: etat,
     emoji: emoji,
-    statut: 'active',
+    statut: 'pending',
     vues: 0
   }]).select().single();
 
@@ -2377,9 +2453,15 @@ async function publierAnnonce() {
     return;
   }
 
-  mesAnnonces.unshift({ nom: titre, prix: prix, emoji: emoji, status: 'actif', vues: 0, msgs: 0, id: data.id });
+  // Notifier l'admin par email via EmailJS
+  notifierAdmin(titre, prix, emoji, currentUser.email || 'inconnu');
+
+  mesAnnonces.unshift({ nom: titre, prix: prix, emoji: emoji, status: 'pending', vues: 0, msgs: 0, id: data.id });
   renderMesAnnonces();
-  toast('✅ Annonce publiée avec succès !');
+
+  // Afficher modal de confirmation au vendeur
+  afficherConfirmationSoumission(titre, emoji);
+
   document.getElementById('titreAnnonce').value = '';
   document.getElementById('prixVente').value = '';
   document.getElementById('prixAchat').value = '';
@@ -2399,7 +2481,7 @@ function renderMesAnnonces() {
         <div class="annonce-nom">${a.nom}</div>
         <div class="annonce-prix">${formatFCFA(a.prix)} FCFA</div>
         <div class="annonce-status ${a.status}">
-          ${a.status === 'actif' ? '🟢 Active' : a.status === 'vendu' ? '🔵 Vendu' : '🟡 En pause'}
+          ${a.status === 'actif' ? '🟢 Active' : a.status === 'vendu' ? '🔵 Vendu' : a.status === 'pending' ? '🟠 En attente de validation' : '🟡 En pause'}
         </div>
         <div class="annonce-stats">
           <span>👁️ ${a.vues} vues</span>
@@ -2687,6 +2769,130 @@ function confirmerPaiementOm() { finaliserPaiement(); }
 
 
 
+// ===== ADMIN =====
+var ADMIN_PWD = 'KaayAdmin2026!';
+var adminTabActif = 'pending';
+
+function verifierAdmin() {
+  var pwd = document.getElementById('adminPwd').value;
+  if (pwd === ADMIN_PWD) {
+    document.getElementById('adminLock').style.display = 'none';
+    document.getElementById('adminPanel').style.display = 'block';
+    chargerAnnoncesAdmin();
+  } else {
+    toast('❌ Mot de passe incorrect');
+    document.getElementById('adminPwd').value = '';
+    document.getElementById('adminPwd').focus();
+  }
+}
+
+function switchAdminTab(tab, el) {
+  adminTabActif = tab;
+  document.querySelectorAll('.admin-tab').forEach(function(t){ t.classList.remove('active'); });
+  if (el) el.classList.add('active');
+  chargerAnnoncesAdmin();
+}
+
+async function chargerAnnoncesAdmin() {
+  var list = document.getElementById('adminAnnoncesList');
+  list.innerHTML = '<div style="text-align:center;padding:30px;color:var(--gris)">⏳ Chargement...</div>';
+
+  var { data, error } = await supabaseClient
+    .from('annonces')
+    .select('*, profiles(nom, email)')
+    .order('created_at', { ascending: false });
+
+  if (error) { list.innerHTML = '<div style="color:var(--rouge);padding:20px">❌ Erreur : ' + error.message + '</div>'; return; }
+  if (!data) data = [];
+
+  var pending  = data.filter(function(a){ return a.statut === 'pending'; });
+  var active   = data.filter(function(a){ return a.statut === 'active'; });
+  var rejected = data.filter(function(a){ return a.statut === 'rejected'; });
+
+  document.getElementById('adminNbPending').textContent  = pending.length;
+  document.getElementById('adminNbActive').textContent   = active.length;
+  document.getElementById('adminNbRejected').textContent = rejected.length;
+
+  var filtered = adminTabActif === 'pending' ? pending : adminTabActif === 'active' ? active : rejected;
+
+  if (filtered.length === 0) {
+    list.innerHTML = '<div class="admin-empty"><div class="admin-empty-icon">' +
+      (adminTabActif === 'pending' ? '✅' : adminTabActif === 'active' ? '📭' : '📋') +
+      '</div><div style="font-weight:600;color:var(--texte)">' +
+      (adminTabActif === 'pending' ? 'Aucune annonce en attente !' : 'Aucune annonce ici.') +
+      '</div></div>';
+    return;
+  }
+
+  list.innerHTML = filtered.map(function(a) {
+    var vendeurNom = (a.profiles && a.profiles.nom) ? a.profiles.nom : 'Vendeur inconnu';
+    var vendeurEmail = (a.profiles && a.profiles.email) ? a.profiles.email : '';
+    var date = a.created_at ? new Date(a.created_at).toLocaleString('fr-FR') : '—';
+    var btns = '';
+    if (a.statut === 'pending') {
+      btns = '<button class="btn-valider" onclick="validerAnnonce(\'' + a.id + '\',this)">✅ Valider</button>' +
+             '<button class="btn-refuser" onclick="refuserAnnonce(\'' + a.id + '\',this)">❌ Refuser</button>';
+    } else if (a.statut === 'active') {
+      btns = '<button class="btn-refuser" onclick="refuserAnnonce(\'' + a.id + '\',this)">🚫 Désactiver</button>';
+    } else {
+      btns = '<button class="btn-valider" onclick="validerAnnonce(\'' + a.id + '\',this)">✅ Réactiver</button>';
+    }
+    return '<div class="admin-card" id="acard-' + a.id + '">' +
+      '<div class="admin-card-emoji">' + (a.emoji || '📦') + '</div>' +
+      '<div class="admin-card-body">' +
+        '<div class="admin-card-nom">' + (a.titre || '—') + '</div>' +
+        '<div class="admin-card-prix">' + (a.prix ? a.prix.toLocaleString('fr-FR') + ' FCFA' : '—') + '</div>' +
+        '<div class="admin-card-meta">👤 ' + vendeurNom + (vendeurEmail ? ' · ' + vendeurEmail : '') + ' · 📅 ' + date + '</div>' +
+        (a.description ? '<div class="admin-card-desc">' + a.description.substring(0,150) + (a.description.length>150?'...':'') + '</div>' : '') +
+        '<div class="admin-card-btns">' + btns + '</div>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+}
+
+async function validerAnnonce(id, btn) {
+  btn.disabled = true; btn.textContent = '⏳...';
+  var { error } = await supabaseClient.from('annonces').update({ statut: 'active' }).eq('id', id);
+  if (error) { toast('❌ Erreur : ' + error.message); btn.disabled = false; btn.textContent = '✅ Valider'; return; }
+  toast('✅ Annonce validée — visible sur le marché !');
+  document.getElementById('acard-' + id).remove();
+  chargerAnnoncesAdmin();
+}
+
+async function refuserAnnonce(id, btn) {
+  btn.disabled = true; btn.textContent = '⏳...';
+  var { error } = await supabaseClient.from('annonces').update({ statut: 'rejected' }).eq('id', id);
+  if (error) { toast('❌ Erreur : ' + error.message); btn.disabled = false; btn.textContent = '❌ Refuser'; return; }
+  toast('🚫 Annonce refusée.');
+  document.getElementById('acard-' + id).remove();
+  chargerAnnoncesAdmin();
+}
+
+// ===== NOTIFICATION ADMIN & CONFIRMATION VENDEUR =====
+
+function notifierAdmin(titre, prix, emoji, emailVendeur) {
+  if (window.emailjs) {
+    emailjs.send('service_kaaydiaay', 'template_nouvelle_annonce', {
+      to_email: 'brobusinessman2022@gmail.com',
+      annonce_titre: titre,
+      annonce_prix: prix.toLocaleString('fr-FR') + ' FCFA',
+      annonce_emoji: emoji,
+      vendeur_email: emailVendeur,
+      date: new Date().toLocaleString('fr-FR')
+    }).catch(function(e){ console.log('EmailJS:', e); });
+  }
+  console.log('📢 Nouvelle annonce en attente :', emoji, titre, '-', prix, 'FCFA');
+}
+
+function afficherConfirmationSoumission(titre, emoji) {
+  document.getElementById('confirmSoumissionOverlay').classList.add('open');
+  document.getElementById('confirmSoumissionTitre').textContent = emoji + ' ' + titre;
+}
+
+function fermerConfirmSoumission() {
+  document.getElementById('confirmSoumissionOverlay').classList.remove('open');
+}
+
 // ===== SUPABASE AUTH =====
 var SUPABASE_URL = "https://xdrpukamwtbijqoqkkih.supabase.co";
 var SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhkcnB1a2Ftd3RiaWpxb3Fra2loIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAyMzU4MDAsImV4cCI6MjA5NTgxMTgwMH0.Vo5CuzhsEzWDwB_Gi2LNK6vxCfzWT2-XubB3ZAhtJyo";
@@ -2862,8 +3068,13 @@ function updateHeaderAuth() {
     if(profilNbAnnonces) profilNbAnnonces.textContent = mesAnnonces.length;
     if(profilNbVentes) profilNbVentes.textContent = HISTORIQUE.filter(function(h){ return h.type==='vente'; }).length;
     if(window.renderTdb) renderTdb();
+    // Afficher onglet admin si compte admin
+    var tabAdmin = document.getElementById('tab-admin');
+    if (tabAdmin) tabAdmin.style.display = currentUser.email === 'brobusinessman2022@gmail.com' ? 'flex' : 'none';
   } else {
     btnZone.innerHTML = "<button class=\"btn-vendre\" style=\"background:transparent;border:1.5px solid var(--bordure);color:var(--texte);\" onclick=\"ouvrirAuth('connexion')\">Connexion</button>";
+    var tabAdmin = document.getElementById('tab-admin');
+    if (tabAdmin) tabAdmin.style.display = 'none';
   }
 }
 
@@ -3541,6 +3752,41 @@ function fermerPageFooter() {
   document.body.style.overflow = '';
 }
 </script>
+
+<!-- ============ MODALE CONFIRMATION SOUMISSION ============ -->
+<style>
+.confirm-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:10001; align-items:center; justify-content:center; padding:20px; }
+.confirm-overlay.open { display:flex; }
+.confirm-box { background:white; border-radius:20px; max-width:380px; width:100%; padding:36px 28px; text-align:center; animation:modalIn 0.3s ease; }
+.confirm-icon { font-size:52px; margin-bottom:16px; }
+.confirm-titre { font-family:'Playfair Display',serif; font-size:22px; font-weight:900; color:#0e6e3f; margin-bottom:8px; }
+.confirm-sub { font-size:14px; color:#6b7c72; line-height:1.7; margin-bottom:8px; }
+.confirm-annonce { background:#e8f5ee; border-radius:10px; padding:12px 16px; font-size:14px; font-weight:700; color:#0d1f17; margin:14px 0 20px; }
+.confirm-steps { text-align:left; background:#f2f7f4; border-radius:12px; padding:14px 18px; margin-bottom:20px; }
+.confirm-step { display:flex; align-items:center; gap:10px; font-size:13px; color:#1c2e24; margin-bottom:8px; }
+.confirm-step:last-child { margin-bottom:0; }
+.confirm-step-dot { width:20px; height:20px; background:#0e6e3f; color:white; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:700; flex-shrink:0; }
+.confirm-whatsapp { width:100%; padding:13px; background:#25d366; color:white; border:none; border-radius:12px; font-size:14px; font-weight:700; cursor:pointer; font-family:'DM Sans',sans-serif; margin-bottom:10px; }
+.confirm-ok { width:100%; padding:11px; background:#0e6e3f; color:white; border:none; border-radius:12px; font-size:14px; font-weight:600; cursor:pointer; font-family:'DM Sans',sans-serif; }
+</style>
+
+<div class="confirm-overlay" id="confirmSoumissionOverlay">
+  <div class="confirm-box">
+    <div class="confirm-icon">⏳</div>
+    <div class="confirm-titre">Annonce soumise !</div>
+    <div class="confirm-sub">Votre annonce est en attente de validation par l'équipe KAAY DIAAY.</div>
+    <div class="confirm-annonce" id="confirmSoumissionTitre">—</div>
+    <div class="confirm-steps">
+      <div class="confirm-step"><div class="confirm-step-dot">1</div><span>Votre annonce est en cours de vérification</span></div>
+      <div class="confirm-step"><div class="confirm-step-dot">2</div><span>Validation sous <strong>24h maximum</strong></span></div>
+      <div class="confirm-step"><div class="confirm-step-dot">3</div><span>Vous serez notifié dès qu'elle est visible</span></div>
+    </div>
+    <button class="confirm-whatsapp" onclick="window.open('https://wa.me/221787946704?text=Bonjour%20KAAY%20DIAAY%2C%20j%27ai%20soumis%20une%20annonce%20en%20attente%20de%20validation.','_blank');fermerConfirmSoumission()">
+      💬 Suivre via WhatsApp
+    </button>
+    <button class="confirm-ok" onclick="fermerConfirmSoumission()">✅ Compris, j'attends</button>
+  </div>
+</div>
 
 <!-- PWA Install Banner -->
 <div id="pwa-banner">
