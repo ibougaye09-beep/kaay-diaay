@@ -1530,7 +1530,7 @@ footer {
 
 <!-- Topbar -->
 <div class="topbar">
-  <span>📍 Dakar, Sénégal &nbsp;|&nbsp; 🔒 Paiements sécurisés Wave & Orange Money</span>
+  <span>📍 Dakar, Sénégal &nbsp;|&nbsp; 🔒 Paiements sécurisés via Wave</span>
   <span>📞 Assistance : +221 78 794 67 04</span>
 </div>
 
@@ -1585,7 +1585,7 @@ footer {
     <div class="hero-content">
       <div class="hero-text">
         <h1>Le marché local,<br>maintenant <span>en ligne</span></h1>
-        <p>Achetez et vendez facilement entre particuliers au Sénégal. Paiements sécurisés via Wave ou Orange Money.</p>
+        <p>Achetez et vendez facilement entre particuliers au Sénégal. Paiements sécurisés via Wave.</p>
         <div class="hero-btns">
           <button class="btn-hero-primary" onclick="showSection('vendre')">Publier une annonce</button>
           <button class="btn-hero-sec" onclick="scrollTo({top:500,behavior:'smooth'})">Explorer le marché</button>
@@ -1714,17 +1714,7 @@ footer {
             <div class="pmt-option selected" onclick="selectPmt(this)">
               <div class="pmt-icon">📱</div>
               <div class="pmt-nom">Wave</div>
-              <div class="pmt-desc">Paiement mobile</div>
-            </div>
-            <div class="pmt-option" onclick="selectPmt(this)">
-              <div class="pmt-icon">🟠</div>
-              <div class="pmt-nom">Orange Money</div>
-              <div class="pmt-desc">Paiement mobile</div>
-            </div>
-            <div class="pmt-option" onclick="selectPmt(this)">
-              <div class="pmt-icon">🔵</div>
-              <div class="pmt-nom">Les deux</div>
-              <div class="pmt-desc">Wave + Orange Money</div>
+              <div class="pmt-desc">Paiement mobile sécurisé</div>
             </div>
           </div>
         </div>
@@ -1750,12 +1740,11 @@ footer {
       <div class="convs-list" id="convsList"></div>
       <div class="chat-area">
         <div class="chat-header">
-          <div class="conv-avatar" id="chatAvatar">A</div>
+          <div class="conv-avatar" id="chatAvatar">?</div>
           <div class="info">
-            <div class="nom" id="chatNom">Aminata Diallo</div>
-            <div class="statut">🟢 En ligne</div>
+            <div class="nom" id="chatNom">Sélectionnez une conversation</div>
+            <div class="statut" id="chatStatut">—</div>
           </div>
-          <div style="font-size:12px;color:var(--gris)">📦 iPhone 13</div>
         </div>
         <div class="chat-messages" id="chatMessages"></div>
         <div class="chat-input-area">
@@ -1951,7 +1940,7 @@ footer {
           <ol>
             <li><strong>Produits réels uniquement :</strong> Toute annonce doit correspondre à un produit réel, disponible et conforme à la description.</li>
             <li><strong>Identité vérifiée :</strong> Les vendeurs doivent être identifiables. Les comptes anonymes seront suspendus.</li>
-            <li><strong>Paiements Wave/Orange Money uniquement :</strong> Aucun autre mode de paiement n'est accepté sur la plateforme.</li>
+            <li><strong>Paiements Wave uniquement :</strong> Aucun autre mode de paiement n'est accepté sur la plateforme.</li>
             <li><strong>Validation admin :</strong> Toute transaction doit être validée par un administrateur avant libération des fonds.</li>
             <li><strong>Produits interdits :</strong> Sont prohibés : armes, drogues, produits contrefaits, espèces protégées, et tout article illégal selon la loi sénégalaise.</li>
             <li><strong>Sanctions :</strong> En cas de fraude avérée, le compte sera définitivement suspendu et les autorités pourront être saisies.</li>
@@ -2003,13 +1992,9 @@ footer {
       </div>
       <div class="modal-desc" id="modalDesc">—</div>
       <div class="modal-actions">
-        <button class="btn-wave" onclick="ouvrirWaveQR()">
+        <button class="btn-wave" onclick="ouvrirWaveQR()" style="width:100%;justify-content:center;">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><path d="M14 14h3v3m0 4h4m-4-4v4m-7 0h3"/></svg>
           Payer par Wave
-        </button>
-        <button class="btn-orange" onclick="ouvrirOmQR()" style="display:flex;align-items:center;justify-content:center;gap:8px;">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><path d="M14 14h3v3m0 4h4m-4-4v4m-7 0h3"/></svg>
-          Orange Money
         </button>
       </div>
     </div>
@@ -2052,7 +2037,7 @@ footer {
       <form class="auth-form" id="form-inscription" onsubmit="submitInscription(event)">
         <div class="auth-field">
           <label>Prénom et Nom</label>
-          <input type="text" id="reg-nom" placeholder="Mamadou Diop" autocomplete="name"/>
+          <input type="text" id="reg-nom" placeholder="Votre nom complet" autocomplete="name"/>
         </div>
         <div class="auth-field">
           <label>Numéro de téléphone</label>
@@ -2180,66 +2165,24 @@ footer {
       <a href="#" onclick="ouvrirPageFooter('contact');return false;">Contact</a>
       <a href="#" onclick="ouvrirPageFooter('aide');return false;">Aide</a>
     </div>
-    <div class="footer-copy">© 2026 KAAY DIAAY — Dakar, Sénégal<br>Powered by Wave & Orange Money</div>
+    <div class="footer-copy">© 2026 KAAY DIAAY — Dakar, Sénégal<br>Powered by Wave</div>
   </div>
 </footer>
 
 <script>
 // ===== DONNÉES =====
-const PRODUITS = [
-  { id:1, nom:'iPhone 13 Pro – 256GB', cat:'electronique', prix:320000, prixAnc:380000, etat:'Très bon état', emoji:'📱', vendeur:'Moussa Sy', badge:'promo', desc:'iPhone 13 Pro graphite, 256GB, Face ID parfait, batterie 88%. Vendu avec chargeur d\'origine. Livraison possible Dakar.' },
-  { id:2, nom:'Boubou Grand Boubou Brodé', cat:'habillement', prix:45000, etat:'Neuf', emoji:'👗', vendeur:'Fatou Diop', badge:'neuf', desc:'Grand boubou en bazin riche, broderie main, couleur bleu royal. Taille L/XL. Idéal cérémonie.' },
-  { id:3, nom:'Laptop HP EliteBook 840', cat:'electronique', prix:280000, etat:'Bon état', emoji:'💻', vendeur:'Ibrahima Fall', badge:null, desc:'HP EliteBook 840 G7, Core i5 10ème génération, 16GB RAM, SSD 512GB, écran 14". Windows 11 Pro activé.' },
-  { id:4, nom:'Thiébou Dieune Bio – 1kg', cat:'alimentation', prix:3500, etat:'Neuf', emoji:'🍚', vendeur:'Coumba Ndoye', badge:'neuf', desc:'Riz de qualité premium pour thiébou dieune authentique. Produit local, cultivé à Saint-Louis.' },
-  { id:5, nom:'Samsung Galaxy Tab A8', cat:'electronique', prix:95000, prixAnc:120000, etat:'Bon état', emoji:'📱', vendeur:'Aliou Bâ', badge:'promo', desc:'Tablette Samsung Galaxy Tab A8, 64GB, WiFi + 4G, état impeccable. Livré avec étui de protection.' },
-  { id:6, nom:'Sac en cuir Artisanal', cat:'artisanat', prix:25000, etat:'Neuf', emoji:'👜', vendeur:'Ndèye Sarr', badge:'neuf', desc:'Sac à main artisanal en cuir véritable, fait main par un artisan de Dakar. Dimensions : 35x25cm.' },
-  { id:7, nom:'Vélo VTT 26" – 21 vitesses', cat:'sport', emoji:'🚲', prix:85000, etat:'Bon état', vendeur:'Cheikh Diallo', badge:null, desc:'VTT aluminium, dérailleur Shimano 21 vitesses, freins à disque. Révision récente, prêt à rouler.' },
-  { id:8, nom:'Crème Karité Pure 100%', cat:'beaute', prix:8500, etat:'Neuf', emoji:'🧴', vendeur:'Rokhaya Thiam', badge:'neuf', desc:'Beurre de karité pur, non raffiné, récolté à Ziguinchor. Idéal peau, cheveux et bébés. 200g.' },
-  { id:9, nom:'Table Basse en Bois Teck', cat:'maison', prix:65000, etat:'Très bon état', emoji:'🪑', vendeur:'Mamadou Gaye', badge:null, desc:'Table basse en bois de teck massif, dimensions 120x60cm. Légères traces d\'usage, très bon état général.' },
-  { id:10, nom:'Livres BTS Pharma Lot x10', cat:'livres', prix:15000, etat:'Bon état', emoji:'📚', vendeur:'Aminata Ndiaye', badge:null, desc:'Lot de 10 livres pour études pharmacie, chimie, biologie. Quelques annotations, très utiles.' },
-  { id:11, nom:'Moto Yobo 125cc – 2022', cat:'vehicule', prix:450000, etat:'Très bon état', emoji:'🏍️', vendeur:'Pape Diène', badge:null, desc:'Moto Yobo 125cc, 2022, 12 000 km. Révisée, carte grise propre. Prête à immatriculer.' },
-  { id:12, nom:'Robe Wax Imprimé Bogolan', cat:'habillement', prix:18000, etat:'Neuf', emoji:'👘', vendeur:'Aïssatou Kouyaté', badge:'neuf', desc:'Robe en wax imprimé bogolan, confection locale. Taille M. Idéale pour toutes occasions.' },
-];
+const PRODUITS = [];
 
-const MES_ANNONCES = [
-  { nom:'Montre Casio G-Shock', prix:35000, emoji:'⌚', status:'actif', vues:124, msgs:3 },
-  { nom:'Canapé 3 places', prix:120000, emoji:'🛋️', status:'pause', vues:87, msgs:1 },
-  { nom:'Réfrigérateur Samsung', prix:180000, emoji:'🧊', status:'vendu', vues:312, msgs:12 },
-];
+const MES_ANNONCES = [];
 
-const CONVERSATIONS = [
-  { nom:'Aminata Diallo', init:'A', preview:'Le téléphone est encore dispo ?', time:'14:32', unread:2 },
-  { nom:'Cheikh Mbaye', init:'C', preview:'Je peux venir voir demain matin', time:'11:15', unread:1 },
-  { nom:'Rokhaya Fall', init:'R', preview:'Merci pour la livraison rapide !', time:'Hier', unread:0 },
-  { nom:'Ibrahima Diop', init:'I', preview:'Vous acceptez les échanges ?', time:'Lun', unread:0 },
-];
+const CONVERSATIONS = [];
 
-const MESSAGES_DATA = {
-  0: [
-    { txt: 'Bonjour ! Le téléphone est encore disponible ?', sent: false, time: '14:28' },
-    { txt: 'Oui, toujours dispo ! C\'est un iPhone 13 Pro en très bon état.', sent: true, time: '14:30' },
-    { txt: 'Vous pouvez faire une réduction si je paie par Wave maintenant ?', sent: false, time: '14:31' },
-    { txt: 'Je peux faire 310 000 FCFA si paiement immédiat via Wave 😊', sent: true, time: '14:32' },
-    { txt: 'Le téléphone est encore dispo ?', sent: false, time: '14:32' },
-  ],
-  1: [
-    { txt: 'Bonjour, je suis intéressé par le canapé.', sent: false, time: '11:10' },
-    { txt: 'Super ! Il est toujours disponible.', sent: true, time: '11:12' },
-    { txt: 'Je peux venir voir demain matin ?', sent: false, time: '11:15' },
-  ],
-};
+const MESSAGES_DATA = {};
 
-const HISTORIQUE = [
-  { nom:'iPhone 13 – vendu', date:'Aujourd\'hui, 10h30', mnt:'+310 000 F', type:'vente' },
-  { nom:'Tablette achetée', date:'Hier, 16h45', mnt:'-95 000 F', type:'achat' },
-  { nom:'Sac artisanal – vendu', date:'03/06, 14h20', mnt:'+25 000 F', type:'vente' },
-  { nom:'Livres – vendus', date:'01/06, 09h00', mnt:'+15 000 F', type:'vente' },
-];
+const HISTORIQUE = [];
 
-const VENTES_MOIS = [
-  { mois:'Jan', val:42000 }, { mois:'Fév', val:78000 }, { mois:'Mar', val:55000 },
-  { mois:'Avr', val:120000 }, { mois:'Mai', val:95000 }, { mois:'Jun', val:187500 },
-];
+const VENTES_MOIS = [];
+
 
 // ===== ÉTAT =====
 let favoris = new Set();
@@ -2293,7 +2236,13 @@ function renderProduits(list) {
         </div>
       </div>
     </div>
-  `).join('') : `<p style="color:var(--gris);font-size:14px;grid-column:1/-1;text-align:center;padding:40px 0;">Aucun résultat pour cette recherche.</p>`;
+  `).join('') : `
+    <div style="grid-column:1/-1;text-align:center;padding:60px 20px;">
+      <div style="font-size:48px;margin-bottom:16px">🛍️</div>
+      <div style="font-size:18px;font-weight:700;color:var(--texte);margin-bottom:8px">Le marché est vide pour l'instant</div>
+      <div style="font-size:14px;color:var(--gris);margin-bottom:20px">Soyez le premier à publier une annonce !</div>
+      <button class="btn-hero-primary" onclick="showSection('vendre')">+ Publier une annonce</button>
+    </div>`;
 }
 
 function filterCat(cat) {
@@ -2646,18 +2595,29 @@ function afficherEtape(etape) {
         '<div class="pay-amount-num' + (isWave ? '' : ' om') + '">' + prix.toLocaleString('fr-FR') + ' FCFA</div>' +
         '<div class="pay-amount-label">Envoyez exactement ce montant</div>' +
       '</div>' +
-      '<div class="pay-instruction-box' + instrClass + '">' +
-        '<div class="pay-instr-step"><div class="pay-instr-num' + numClass + '">1</div><span>Ouvrez votre app <strong>' + (isWave ? 'Wave' : 'Orange Money') + '</strong> sur votre téléphone</span></div>' +
-        '<div class="pay-instr-step"><div class="pay-instr-num' + numClass + '">2</div><span>Appuyez sur <strong>' + (isWave ? 'Envoyer de l\'argent' : 'Transfert / Payer') + '</strong></span></div>' +
-        '<div class="pay-instr-step"><div class="pay-instr-num' + numClass + '">3</div><span>Entrez le numéro ci-dessous et le montant <strong>' + prix.toLocaleString('fr-FR') + ' FCFA</strong></span></div>' +
-        '<div class="pay-instr-step"><div class="pay-instr-num' + numClass + '">4</div><span>Validez avec votre <strong>code secret</strong></span></div>' +
-      '</div>' +
-      '<div class="pay-numero-box">' +
-        '<div class="pay-numero-label">Numéro ' + (isWave ? 'Wave' : 'Orange Money') + ' du vendeur</div>' +
-        '<div class="pay-numero-val">' + numStr + '</div>' +
-        '<div class="pay-numero-copy" onclick="copierNumero(\'' + numStr + '\')">📋 Appuyez pour copier</div>' +
-      '</div>' +
-      '<button class="pay-btn-confirm" onclick="afficherEtape(3)"' + (isWave ? '' : '') + '>✅ J\'ai effectué le paiement →</button>' +
+      (isWave
+        ? '<div class="pay-instruction-box">' +
+            '<div class="pay-instr-step"><div class="pay-instr-num">1</div><span>Cliquez sur le bouton <strong>Ouvrir Wave</strong> ci-dessous</span></div>' +
+            '<div class="pay-instr-step"><div class="pay-instr-num">2</div><span>Wave s\'ouvre avec le montant <strong>' + prix.toLocaleString('fr-FR') + ' FCFA</strong> pré-rempli</span></div>' +
+            '<div class="pay-instr-step"><div class="pay-instr-num">3</div><span>Confirmez avec votre <strong>code secret Wave</strong></span></div>' +
+            '<div class="pay-instr-step"><div class="pay-instr-num">4</div><span>Revenez ici et cliquez <strong>"J\'ai effectué le paiement"</strong></span></div>' +
+          '</div>' +
+          '<a href="https://pay.wave.com/m/M_sn_-ank2GfPJwX4/c/sn/?amount=' + prix + '" target="_blank" style="display:block;text-decoration:none;margin-bottom:12px">' +
+            '<button class="pay-btn-wave" style="width:100%;font-size:16px;padding:16px">💳 Ouvrir Wave — ' + prix.toLocaleString('fr-FR') + ' FCFA →</button>' +
+          '</a>'
+        : '<div class="pay-instruction-box om">' +
+            '<div class="pay-instr-step"><div class="pay-instr-num om">1</div><span>Ouvrez votre app <strong>Orange Money</strong> sur votre téléphone</span></div>' +
+            '<div class="pay-instr-step"><div class="pay-instr-num om">2</div><span>Appuyez sur <strong>Transfert / Payer</strong></span></div>' +
+            '<div class="pay-instr-step"><div class="pay-instr-num om">3</div><span>Entrez le numéro ci-dessous et le montant <strong>' + prix.toLocaleString('fr-FR') + ' FCFA</strong></span></div>' +
+            '<div class="pay-instr-step"><div class="pay-instr-num om">4</div><span>Validez avec votre <strong>code secret</strong></span></div>' +
+          '</div>' +
+          '<div class="pay-numero-box">' +
+            '<div class="pay-numero-label">Numéro Orange Money du vendeur</div>' +
+            '<div class="pay-numero-val">' + numStr + '</div>' +
+            '<div class="pay-numero-copy" onclick="copierNumero(\'' + numStr + '\')">📋 Appuyez pour copier</div>' +
+          '</div>'
+      ) +
+      '<button class="pay-btn-confirm" onclick="afficherEtape(3)">✅ J\'ai effectué le paiement →</button>' +
       '<div class="pay-securite-note">⚠️ Ne confirmez que si vous avez bien effectué le transfert</div>';
 
   } else if (etape === 3) {
@@ -2936,36 +2896,18 @@ var tdbPeriod = 'semaine';
 var chartRevenus = null;
 
 var TDB_DATA = {
-  semaine: {
-    labels: ['Lun','Mar','Mer','Jeu','Ven','Sam','Dim'],
-    revenus: [45000,0,78000,32000,95000,120000,58000],
-    brut: 428000, ventes: 7, vues: 312, evolRevenu: '+18%', evolVentes: '+3'
-  },
-  mois: {
-    labels: ['S1','S2','S3','S4'],
-    revenus: [245000,380000,195000,428000],
-    brut: 1248000, ventes: 28, vues: 1840, evolRevenu: '+23%', evolVentes: '+8'
-  },
-  annee: {
-    labels: ['Jan','Fév','Mar','Avr','Mai','Jun'],
-    revenus: [42000,78000,55000,120000,95000,187500],
-    brut: 3250000, ventes: 94, vues: 12400, evolRevenu: '+41%', evolVentes: '+24'
-  }
+  semaine: { labels: ['Lun','Mar','Mer','Jeu','Ven','Sam','Dim'], revenus: [0,0,0,0,0,0,0], brut: 0, ventes: 0, vues: 0, evolRevenu: '+0%', evolVentes: '+0' },
+  mois:    { labels: ['S1','S2','S3','S4'], revenus: [0,0,0,0], brut: 0, ventes: 0, vues: 0, evolRevenu: '+0%', evolVentes: '+0' },
+  annee:   { labels: ['Jan','Fév','Mar','Avr','Mai','Jun'], revenus: [0,0,0,0,0,0], brut: 0, ventes: 0, vues: 0, evolRevenu: '+0%', evolVentes: '+0' }
 };
 
-var TDB_HIST = [
-  { type:'vente', emoji:'📱', nom:'iPhone 13 Pro — vendu', date:"Aujourd'hui, 10h30", mnt:310000 },
-  { type:'commission', emoji:'💜', nom:'Commission KAAY reçue', date:"Aujourd'hui, 10h30", mnt:15500 },
-  { type:'vente', emoji:'💻', nom:'Laptop Dell — vendu', date:'Hier, 16h45', mnt:185000 },
-  { type:'achat', emoji:'🎧', nom:'Casque Sony — acheté', date:'03/06, 14h20', mnt:-45000 },
-  { type:'vente', emoji:'📷', nom:'Appareil photo — vendu', date:'01/06, 09h00', mnt:120000 },
-];
+var TDB_HIST = [];
 
 var TDB_CATS = [
-  { nom:'Électronique', pct:65, color:'#0e6e3f' },
-  { nom:'Mode', pct:18, color:'#e8a020' },
-  { nom:'Maison', pct:10, color:'#1da1f2' },
-  { nom:'Autres', pct:7, color:'#7c3aed' },
+  { nom:'Électronique', pct:0, color:'#0e6e3f' },
+  { nom:'Mode', pct:0, color:'#e8a020' },
+  { nom:'Maison', pct:0, color:'#1da1f2' },
+  { nom:'Autres', pct:0, color:'#7c3aed' },
 ];
 
 function setTdbPeriod(period, el) {
@@ -3051,11 +2993,7 @@ function renderTdb() {
   }).join('');
 
   // Annonces actives
-  var annonces = (window.mesAnnonces && mesAnnonces.length) ? mesAnnonces : [
-    { emoji:'📱', nom:'iPhone 13 Pro Max', prix:320000, statut:'active' },
-    { emoji:'💻', nom:'Laptop Dell XPS 15', prix:450000, statut:'active' },
-    { emoji:'📷', nom:'Canon EOS 250D', prix:185000, statut:'pending' },
-  ];
+  var annonces = (window.mesAnnonces && mesAnnonces.length) ? mesAnnonces : [];
   document.getElementById('tdbAnnoncesList').innerHTML = annonces.slice(0,4).map(function(a){
     var statut = a.statut || 'active';
     return '<div class="tdb-annonce-row">' +
@@ -3314,7 +3252,7 @@ var FOOTER_PAGES = {
       <div class="fm-section">
         <h3>💡 Pourquoi KAAY DIAAY ?</h3>
         <ul>
-          <li>Paiements 100% locaux via <strong>Wave</strong> et <strong>Orange Money</strong></li>
+          <li>Paiements 100% locaux via <strong>Wave</strong></li>
           <li>Interface en français et en wolof</li>
           <li>Vendeurs vérifiés et système de confiance intégré</li>
           <li>Protection des transactions par système escrow</li>
@@ -3389,7 +3327,7 @@ var FOOTER_PAGES = {
       <div class="fm-section">
         <h3>5️⃣ Paiements et transactions</h3>
         <ul>
-          <li>Seuls les paiements via <strong>Wave</strong> et <strong>Orange Money</strong> sont acceptés.</li>
+          <li>Seuls les paiements via <strong>Wave</strong> sont acceptés.</li>
           <li>Un système escrow protège les deux parties jusqu'à confirmation de réception.</li>
           <li>KAAY DIAAY prélève une commission de 3% sur chaque transaction réussie.</li>
         </ul>
@@ -3441,7 +3379,7 @@ var FOOTER_PAGES = {
         <ul>
           <li>Nous ne vendons jamais vos données à des tiers</li>
           <li>Nous ne partageons pas vos informations sans votre consentement</li>
-          <li>Nous ne stockons pas vos codes PIN Wave ou Orange Money</li>
+          <li>Nous ne stockons pas vos codes PIN Wave</li>
         </ul>
       </div>
       <div class="fm-section">
@@ -3532,7 +3470,7 @@ var FOOTER_PAGES = {
         <h3>🛒 Pour les Acheteurs</h3>
         <div class="fm-faq-item" onclick="this.classList.toggle('open')">
           <div class="fm-faq-q">Comment acheter un produit ? <span>▾</span></div>
-          <div class="fm-faq-a">Cliquez sur un produit, puis sur "Acheter". Choisissez votre mode de paiement (Wave ou Orange Money) et suivez les instructions. Le vendeur sera notifié immédiatement.</div>
+          <div class="fm-faq-a">Cliquez sur un produit, puis sur "Acheter". Choisissez votre mode de paiement (Wave) et suivez les instructions. Le vendeur sera notifié immédiatement.</div>
         </div>
         <div class="fm-faq-item" onclick="this.classList.toggle('open')">
           <div class="fm-faq-q">Comment payer en toute sécurité ? <span>▾</span></div>
@@ -3559,7 +3497,7 @@ var FOOTER_PAGES = {
         </div>
         <div class="fm-faq-item" onclick="this.classList.toggle('open')">
           <div class="fm-faq-q">Comment recevoir mes paiements ? <span>▾</span></div>
-          <div class="fm-faq-a">Après confirmation de réception par l'acheteur, le montant (moins la commission) est transféré automatiquement sur votre compte Wave ou Orange Money dans les 24h.</div>
+          <div class="fm-faq-a">Après confirmation de réception par l'acheteur, le montant (moins la commission) est transféré automatiquement sur votre compte Wave dans les 24h.</div>
         </div>
         <div class="fm-faq-item" onclick="this.classList.toggle('open')">
           <div class="fm-faq-q">Comment améliorer mon score de confiance ? <span>▾</span></div>
@@ -3570,11 +3508,11 @@ var FOOTER_PAGES = {
         <h3>💳 Paiements</h3>
         <div class="fm-faq-item" onclick="this.classList.toggle('open')">
           <div class="fm-faq-q">Quels modes de paiement sont acceptés ? <span>▾</span></div>
-          <div class="fm-faq-a">Actuellement : Wave et Orange Money. D'autres modes de paiement (Free Money, carte bancaire) seront ajoutés prochainement.</div>
+          <div class="fm-faq-a">Actuellement : Wave. D'autres modes de paiement (Free Money, carte bancaire) seront ajoutés prochainement.</div>
         </div>
         <div class="fm-faq-item" onclick="this.classList.toggle('open')">
           <div class="fm-faq-q">Mon paiement a échoué, que faire ? <span>▾</span></div>
-          <div class="fm-faq-a">Vérifiez votre solde Wave/Orange Money, puis réessayez. Si le problème persiste, contactez notre support à support@kaaydiaay.sn en indiquant votre numéro de transaction.</div>
+          <div class="fm-faq-a">Vérifiez votre solde Wave, puis réessayez. Si le problème persiste, contactez notre support à support@kaaydiaay.sn en indiquant votre numéro de transaction.</div>
         </div>
       </div>
       <div style="text-align:center;margin-top:20px">
