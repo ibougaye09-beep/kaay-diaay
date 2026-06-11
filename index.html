@@ -2251,7 +2251,8 @@ footer {
 <!-- Modal Wave QR Code -->
 <!-- TUNNEL PAIEMENT WAVE -->
 <style>
-.pay-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.75); z-index:10000; align-items:center; justify-content:center; padding:16px; }
+.pay-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.75); z-index:10000; align-items:center; justify-content:center; padding:16px; cursor:pointer; }
+.pay-tunnel { cursor:default; }
 .pay-overlay.open { display:flex; }
 .pay-tunnel { background:white; border-radius:20px; width:100%; max-width:380px; overflow:hidden; animation:modalIn 0.3s ease; }
 .pay-header-wave { background:linear-gradient(135deg,#009ee3,#0077b6); padding:20px; text-align:center; color:white; }
@@ -2303,8 +2304,10 @@ footer {
 .pay-btn-close { width:100%; padding:13px; background:#0e6e3f; color:white; border:none; border-radius:12px; font-size:14px; font-weight:700; cursor:pointer; font-family:'DM Sans',sans-serif; }
 </style>
 
-<div class="pay-overlay" id="payOverlay">
-  <div class="pay-tunnel" id="payTunnel">
+<div class="pay-overlay" id="payOverlay" onclick="if(event.target===this)fermerTunnel()">
+  <div class="pay-tunnel" id="payTunnel" style="position:relative">
+    <!-- Bouton fermer -->
+    <button onclick="fermerTunnel()" style="position:absolute;top:10px;right:12px;background:rgba(255,255,255,0.25);border:none;color:white;font-size:18px;cursor:pointer;z-index:10;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;line-height:1" title="Fermer">✕</button>
     <!-- Header dynamique -->
     <div id="payHeader"></div>
     <!-- Barre d'étapes -->
@@ -3009,16 +3012,25 @@ var TAUX_COMMISSION = 0.05; // 5%
 var payData = {};
 var payCountdownTimer = null;
 
-function ouvrirWaveQR() { lancerTunnel('wave'); }
-function ouvrirOmQR()   { lancerTunnel('om'); }
+function ouvrirWaveQR() {
+  if (!currentUser) { ouvrirAuth('connexion'); toast('🔒 Connectez-vous pour payer'); return; }
+  if (!currentProduit) { toast('⚠️ Aucun produit sélectionné'); return; }
+  lancerTunnel('wave');
+}
+function ouvrirOmQR() {
+  if (!currentUser) { ouvrirAuth('connexion'); toast('🔒 Connectez-vous pour payer'); return; }
+  if (!currentProduit) { toast('⚠️ Aucun produit sélectionné'); return; }
+  lancerTunnel('om');
+}
 
 function lancerTunnel(mode) {
-  var nom = currentProduit ? currentProduit.nom : document.getElementById('modalNom').textContent;
-  var prixProduit = currentProduit ? currentProduit.prix : parseInt(document.getElementById('modalPrix').textContent.replace(/[^0-9]/g, '')) || 0;
+  if (!currentProduit) { toast('⚠️ Aucun produit sélectionné'); return; }
+  var nom = currentProduit.nom;
+  var prixProduit = currentProduit.prix || 0;
   var LIVRAISON = 1500;
   var prix = Math.round(prixProduit + LIVRAISON);
   var commission = Math.round(prixProduit * TAUX_COMMISSION);
-  var emoji = currentProduit ? currentProduit.emoji : (document.getElementById('modalImg').textContent || '📦');
+  var emoji = currentProduit.emoji || '📦';
 
   payData = { mode: mode, nom: nom, prix: prix, prixProduit: prixProduit, commission: commission, emoji: emoji };
 
@@ -3118,7 +3130,7 @@ function afficherEtape(etape) {
             '<div class="pay-numero-copy" onclick="copierNumero(\'' + numStr + '\')">📋 Appuyez pour copier</div>' +
           '</div>'
       ) +
-      '<button class="pay-btn-confirm" onclick="finaliserPaiement()">✅ J\'ai effectué le paiement →</button>' +
+      '<button class="pay-btn-confirm" onclick="afficherEtape(3)">✅ J\'ai effectué le paiement →</button>' +
       '<div class="pay-securite-note">⚠️ Ne confirmez que si vous avez bien effectué le transfert</div>';
 
     // Générer le QR code Wave après rendu du DOM
