@@ -1,0 +1,8 @@
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "com.kaaydiaay.app",
+    "sha256_cert_fingerprints": ["C1:3E:05:D2:B3:81:76:CF:CE:6E:26:CA:C3:54:8F:2A:CC:C4:B5:06:07:C8:4C:6C:EB:35:A4:B4:F7:A7:38:00"]
+  }
+}]
