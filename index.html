@@ -5,6 +5,19 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>KAAY DIAAY — Marché Local Sénégalais</title>
 
+<!-- Description pour Google, et aperçu affiché quand le lien est partagé sur WhatsApp ou Facebook -->
+<meta name="description" content="Achetez et vendez facilement entre particuliers au Sénégal : habillement, électronique, alimentation, beauté, maison, artisanat. Commande finalisée sur WhatsApp.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="KAAY DIAAY">
+<meta property="og:locale" content="fr_SN">
+<meta property="og:url" content="https://kaaydiaay.com/">
+<meta property="og:title" content="KAAY DIAAY — Marché Local Sénégalais">
+<meta property="og:description" content="Achetez et vendez facilement entre particuliers au Sénégal. Commande finalisée sur WhatsApp.">
+<meta property="og:image" content="https://kaaydiaay.com/icon-512.png">
+<meta property="og:image:width" content="512">
+<meta property="og:image:height" content="512">
+<meta name="twitter:card" content="summary">
+
 <!-- ============================================================
      FILET DE SÉCURITÉ — doit rester le TOUT PREMIER script de la page.
 
@@ -2963,6 +2976,9 @@ footer {
 <script>
 // ===== DONNÉES =====
 const PRODUITS = [];
+// État du chargement des annonces : 'chargement' tant que la base n'a pas répondu,
+// puis 'ok' ou 'erreur'. Évite d'afficher « marché vide » avant d'avoir la réponse.
+let _etatMarche = 'chargement';
 
 const MES_ANNONCES = [];
 
@@ -3079,6 +3095,19 @@ setInterval(syncBadgePanierBas, 700);
 // ===== PRODUITS =====
 function renderProduits(list) {
   const grid = document.getElementById('produitsGrid');
+  // Tant que la base n'a pas répondu : « chargement », jamais « marché vide ».
+  // En cas d'erreur, on laisse le message « Connexion interrompue » déjà affiché.
+  if (_etatMarche !== 'ok' && !list && PRODUITS.length === 0) {
+    if (_etatMarche === 'chargement') {
+      grid.innerHTML = `
+    <div style="grid-column:1/-1;text-align:center;padding:60px 20px;">
+      <div style="font-size:48px;margin-bottom:16px">🛍️</div>
+      <div style="font-size:18px;font-weight:700;color:var(--texte);margin-bottom:8px">Chargement du marché…</div>
+      <div style="font-size:14px;color:var(--gris)">Les annonces arrivent dans un instant.</div>
+    </div>`;
+    }
+    return;
+  }
   const src = list || PRODUITS;
   const filtered = catActive === 'tout' ? src : src.filter(p => p.cat === catActive);
   grid.innerHTML = filtered.length ? filtered.map((p, i) => `
@@ -5841,6 +5870,7 @@ async function chargerProduits(_retry) {
     if (!_retry) setTimeout(function(){ chargerProduits(true); }, 2000); // 1 nouvelle tentative auto
     // On garde les produits déjà affichés ; message d'erreur seulement si rien n'a jamais chargé.
     if (PRODUITS.length === 0 && grid) {
+      _etatMarche = 'erreur';
       grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:60px 20px;">'
         + '<div style="font-size:48px;margin-bottom:16px">📡</div>'
         + '<div style="font-size:18px;font-weight:700;color:var(--texte);margin-bottom:8px">Connexion interrompue</div>'
@@ -5851,6 +5881,7 @@ async function chargerProduits(_retry) {
   }
 
   // CAS 2 & 3 — SUCCÈS : on remplace le contenu (liste vide = vrai marché vide).
+  _etatMarche = 'ok';
   PRODUITS.splice(0, PRODUITS.length);
 
   // Bouton « Voir plus » : affiché seulement s'il reste des annonces plus anciennes
